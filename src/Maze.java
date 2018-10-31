@@ -3,12 +3,12 @@ import java.util.ArrayList;
 public class Maze {
 
     private Node[][] nodeMaze;
-    private ArrayList<Node> baseNodes = new ArrayList<>();
-    private int numOfLines;
-    private ArrayList<Node> emptyNodes = new ArrayList<>();
+    private Node[] baseNodes;
+    private Node[] emptyNodes;
     private Node temp;
     private int mazeDim;
-
+    private int baseNodesSize = 0;
+    private int emptyNodesSize = 0;      //will be physical number counted starting at 1
 
     //used to color output
     private String ANSI_RESET = "\u001B[0m";
@@ -25,26 +25,26 @@ public class Maze {
 
     public Maze(char[][] textMaze) {
         mazeDim = textMaze[0].length;
+        baseNodes = new Node[(mazeDim*mazeDim)];
+        emptyNodes  = new Node[(mazeDim*mazeDim)];
         nodeMaze = new Node[mazeDim][mazeDim];
         for (int x = 0; x < mazeDim; x++) {
             for (int y = 0; y < mazeDim; y++) {
-                Node temp = new Node( x, y, textMaze[x][y]);
+                Node temp = new Node(x, y, textMaze[x][y]);
                 nodeMaze[x][y] = temp;
-                if(temp.getBase()){
-                    baseNodes.add(temp);
-                }else {
-                    emptyNodes.add(temp);
+                if (temp.getBase()) {
+                    baseNodes[baseNodesSize] = temp;
+                    baseNodesSize++;
+                } else {
+                    emptyNodes[emptyNodesSize] = temp;
+                    emptyNodesSize++;
                 }
             }
-        }
-        numOfLines = baseNodes.size()/2;
-        for (Node emptyNode : emptyNodes) {
-            emptyNode.instantiatePossibleValues(numOfLines);
         }
     }
 
     public void solveMaze(){                                                                                            //will solve our maze
-        temp = checkNeighborsFor(baseNodes.get(0) , '_');
+
 
         //TODO Solve the maze
     }
@@ -152,29 +152,29 @@ public class Maze {
     }
 
     public void printColorBaseNodes(){                   //prints all none empty nodes in color
-        for (Node baseNode : baseNodes) {
-            if(baseNode.getValue() == 'A') {
-                System.out.print(ANSI_CYAN + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'B'){
-                System.out.print(ANSI_BLACK + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'D'){
-                System.out.print(ANSI_BLUE + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'G'){
-                System.out.print(ANSI_GREEN + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'K'){
-                System.out.print(ANSI_CYAN + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'O'){
-                System.out.print(ANSI_BLUE + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'P') {
-                System.out.print(ANSI_PURPLE + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'Q'){
-                System.out.print(ANSI_GREEN + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'R'){
-                System.out.print(ANSI_RED + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'W'){
-                System.out.print(ANSI_WHITE + baseNode.getValue() + ANSI_RESET + " ");
-            }else if(baseNode.getValue() == 'Y'){
-                System.out.print(ANSI_YELLOW + baseNode.getValue() + ANSI_RESET + " ");
+        for (int x = 0; x < baseNodesSize; x++) {
+            if(baseNodes[x].getValue() == 'A') {
+                System.out.print(ANSI_CYAN + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'B'){
+                System.out.print(ANSI_BLACK + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'D'){
+                System.out.print(ANSI_BLUE + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'G'){
+                System.out.print(ANSI_GREEN + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'K'){
+                System.out.print(ANSI_CYAN + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'O'){
+                System.out.print(ANSI_BLUE + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'P') {
+                System.out.print(ANSI_PURPLE + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'Q'){
+                System.out.print(ANSI_GREEN + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'R'){
+                System.out.print(ANSI_RED + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'W'){
+                System.out.print(ANSI_WHITE + baseNodes[x].getValue() + ANSI_RESET + " ");
+            }else if(baseNodes[x].getValue() == 'Y'){
+                System.out.print(ANSI_YELLOW + baseNodes[x].getValue() + ANSI_RESET + " ");
             }
         }
         System.out.println();
