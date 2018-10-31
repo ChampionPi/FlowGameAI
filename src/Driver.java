@@ -54,5 +54,3 @@ public class Driver {
         return new Maze(newMaze);
     }
 }
-
-//Zan just testing a commit and push
