@@ -17,23 +17,23 @@ public class Driver {
         fiveMaze.solveMaze();
         fiveMaze.printColorMaze();
 
-        sevenMaze.printColorBaseNodes();
-        sevenMaze.printColorMaze();
-
-        eightMaze.printColorBaseNodes();
-        eightMaze.printColorMaze();
-
-        nineMaze.printColorBaseNodes();
-        nineMaze.printColorMaze();
-
-        tenMaze.printColorBaseNodes();
-        tenMaze.printColorMaze();
-
-        twelveMaze.printColorBaseNodes();
-        twelveMaze.printColorMaze();
-
-        fourteenMaze.printColorBaseNodes();
-        fourteenMaze.printColorMaze();
+//        sevenMaze.printColorBaseNodes();
+//        sevenMaze.printColorMaze();
+//
+//        eightMaze.printColorBaseNodes();
+//        eightMaze.printColorMaze();
+//
+//        nineMaze.printColorBaseNodes();
+//        nineMaze.printColorMaze();
+//
+//        tenMaze.printColorBaseNodes();
+//        tenMaze.printColorMaze();
+//
+//        twelveMaze.printColorBaseNodes();
+//        twelveMaze.printColorMaze();
+//
+//        fourteenMaze.printColorBaseNodes();
+//        fourteenMaze.printColorMaze();
 
         System.out.println("Program Done");
     }

@@ -26,7 +26,9 @@ class Node {
     }
 
     public void setValue(char inValue){
-        value = inValue;
+        if(base == false) {
+            value = inValue;
+        }
     }
 
     public void instantiatePossibleValues(int inSize){

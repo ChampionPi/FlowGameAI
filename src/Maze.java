@@ -44,9 +44,61 @@ public class Maze {
     }
 
     public void solveMaze(){                                                                                            //will solve our maze
-
+        for(int x = 0; x < (baseNodesSize/2)-1; x++){
+            int secondNodeIndex = x + 1;
+            while(baseNodes[x].getValue() != baseNodes[secondNodeIndex].getValue()){
+                secondNodeIndex++;
+            }
+            travelFromTo(baseNodes[x], baseNodes[secondNodeIndex]);
+        }
 
         //TODO Solve the maze
+    }
+
+    private void travelFromTo(Node inFirstNode, Node inSecondNode){
+        int travelX = inFirstNode.getX() - inSecondNode.getX();
+        int travelY = inFirstNode.getY() - inSecondNode.getY();
+        if(Math.abs(travelX)>Math.abs(travelY)){
+            checkUpDown(travelX, inFirstNode);
+            checkLeftRight(travelY, inFirstNode);
+        }else{
+            checkLeftRight(travelY, inFirstNode);
+            checkUpDown(travelX, inFirstNode);
+        }
+    }
+
+    private void checkLeftRight(int inTravel, Node inStartNode){
+        while(inTravel != 0) {
+            if (inTravel > 0) {
+                checkLeftNeighborFor(inStartNode, '_');
+                inTravel -= 1;
+            } else if (inTravel < 0) {
+                checkRightNeighborFor(inStartNode, '_');
+                inTravel += 1;
+            } else {
+                return;
+            }
+            if(temp != null) {
+                temp.setValue(inStartNode.getValue());
+            }
+        }
+    }
+
+    private void checkUpDown(int inTravel, Node inStartNode){
+        while(inTravel != 0) {
+            if (inTravel > 0) {
+                temp = checkUpNeighborFor(inStartNode, '_');
+                inTravel -= 1;
+            } else if (inTravel < 0) {
+                temp = checkDownNeighborFor(inStartNode, '_');
+                inTravel += 1;
+            } else {
+                return;
+            }
+            if(temp != null) {
+                temp.setValue(inStartNode.getValue());
+            }
+        }
     }
 
     private Node checkNeighborsFor(Node inNode, char inSearchFor){                                                      //can be used to find empty spaces or partner
