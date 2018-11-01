@@ -44,10 +44,7 @@ public class Maze {
     public void solveMaze(){                                                                                            //will solve our maze
         for(int x = 0; x < (baseNodesSize/2)-1; x++){
             int secondNodeIndex = x + 1;
-//            while(baseNodes[x].getValue() != baseNodes[secondNodeIndex].getValue() && secondNodeIndex < baseNodesSize){
-//                secondNodeIndex++;
-//            }
-            travelFromTo(baseNodes[x], baseNodes[secondNodeIndex]);
+
         }
 
         //TODO Solve the maze
