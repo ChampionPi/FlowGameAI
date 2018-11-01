@@ -67,6 +67,10 @@ public class Maze {
         }
     }
 
+    public void dumbSolve(){
+
+    }
+
     private void checkLeftRight(int inTravel, Node inStartNode){
         while(inTravel != 0) {
             if (inTravel > 0) {
