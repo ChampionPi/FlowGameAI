@@ -1,12 +1,12 @@
 public class Maze {
 
-    private Node[][] nodeMaze;
-    private Node[] baseNodes;
-    private Node[] emptyNodes;
-    private Node temp;
-    private int mazeDim;
-    private int baseNodesSize = 0;
-    private int emptyNodesSize = 0;      //will be physical number counted starting at 1
+    private Node[][] nodeMaze;          //holds the maze with each node containing all relevant information for that spot
+    private Node[] baseNodes;           //holds all nodes that had values when the maze was imported
+    private Node[] emptyNodes;          //holds all nodes that are empty when the maze in imported
+    private Node temp;                  //general temp node to pass info around
+    private int mazeDim;                //for 5x5 maze holds the number 5
+    private int baseNodesSize = 0;      //numbers of basenodes, naturally counted starting at 1
+    private int emptyNodesSize = 0;     //will be physical number counted starting at 1
 
     //used to color output
     private String ANSI_RESET = "\u001B[0m";
@@ -20,14 +20,14 @@ public class Maze {
     private String ANSI_WHITE = "\u001B[37m";
 
 
-
+    //imports the maze and sets a lot of values
     public Maze(char[][] textMaze) {
         mazeDim = textMaze[0].length;
         baseNodes = new Node[(mazeDim*mazeDim)];
         emptyNodes  = new Node[(mazeDim*mazeDim)];
         nodeMaze = new Node[mazeDim][mazeDim];
-        for (int x = 0; x < mazeDim; x++) {
-            for (int y = 0; y < mazeDim; y++) {
+        for (int y = 0; y < mazeDim; y++) {
+            for (int x = 0; x < mazeDim; x++) {
                 Node temp = new Node(x, y, textMaze[x][y]);
                 nodeMaze[x][y] = temp;
                 if (temp.getBase()) {
@@ -40,19 +40,19 @@ public class Maze {
             }
         }
     }
-
+    //solves the maze, mostly just calls the other functions
     public void solveMaze(){                                                                                            //will solve our maze
         for(int x = 0; x < (baseNodesSize/2)-1; x++){
             int secondNodeIndex = x + 1;
-            while(baseNodes[x].getValue() != baseNodes[secondNodeIndex].getValue()){
-                secondNodeIndex++;
-            }
+//            while(baseNodes[x].getValue() != baseNodes[secondNodeIndex].getValue() && secondNodeIndex < baseNodesSize){
+//                secondNodeIndex++;
+//            }
             travelFromTo(baseNodes[x], baseNodes[secondNodeIndex]);
         }
 
         //TODO Solve the maze
     }
-
+    //theoretically you give it two nodes and it travels from one to other
     private void travelFromTo(Node inFirstNode, Node inSecondNode){
         int travelX = inFirstNode.getX() - inSecondNode.getX();
         int travelY = inFirstNode.getY() - inSecondNode.getY();
@@ -64,11 +64,11 @@ public class Maze {
             checkUpDown(travelX, inFirstNode);
         }
     }
-
+    //will solve maze without forward checking and other things
     public void dumbSolve(){
 
     }
-
+    //takes in the first nodes x value - the x value of the second node to determine which direction to go then tries to travel from the node passed into it until x difference = 0
     private void checkLeftRight(int inTravel, Node inStartNode){
         while(inTravel != 0) {
             if (inTravel > 0) {
@@ -85,7 +85,7 @@ public class Maze {
             }
         }
     }
-
+    //takes in the first nodes y value - the y value of the second node to determine which direction to go then tries to travel from the node passed into it until y difference = 0
     private void checkUpDown(int inTravel, Node inStartNode){
         while(inTravel != 0) {
             if (inTravel > 0) {
@@ -102,7 +102,7 @@ public class Maze {
             }
         }
     }
-
+    //takes in put node and checks all 4 nodes if those nodes values ==
     private Node checkNeighborsFor(Node inNode, char inSearchFor){                                                      //can be used to find empty spaces or partner
         if( 0 <= inNode.getX() + 1 && inNode.getX() + 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX() + 1][inNode.getY()].getValue()){
             return nodeMaze[inNode.getX()+1][inNode.getY()];
@@ -116,7 +116,7 @@ public class Maze {
             return null;
         }
     }
-
+    //just checks the node above the current node for the char value passed in
     private Node checkUpNeighborFor(Node inNode, char inSearchFor){                                                      //can be used to find empty spaces or partner
         if( 0 <= inNode.getY() - 1 && inNode.getY() - 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX()][inNode.getY() - 1].getValue()){
             return nodeMaze[inNode.getX()][inNode.getY()-1];
@@ -124,7 +124,7 @@ public class Maze {
             return null;
         }
     }
-
+    //just checks the node below the current node for the char value passed in
     private Node checkDownNeighborFor(Node inNode, char inSearchFor){
         if( 0 <= inNode.getY() + 1 && inNode.getY() + 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX()][inNode.getY() + 1].getValue()){
             return nodeMaze[inNode.getX()][inNode.getY()+1];
@@ -132,7 +132,7 @@ public class Maze {
             return null;
         }
     }
-
+    //just checks the node to the left of the current node for the char value passed in
     private Node checkLeftNeighborFor(Node inNode, char inSearchFor){
         if( 0 <= inNode.getX() - 1 && inNode.getX() - 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX() - 1][inNode.getY()].getValue()){
             return nodeMaze[inNode.getX()-1][inNode.getY()];
@@ -140,7 +140,7 @@ public class Maze {
             return null;
         }
     }
-
+    //just checks the node to the right og the current node for the char value passed in
     private Node checkRightNeighborFor(Node inNode, char inSearchFor){
         if( 0 <= inNode.getX() + 1 && inNode.getX() + 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX() + 1][inNode.getY()].getValue()){
             return nodeMaze[inNode.getX()+1][inNode.getY()];
@@ -148,7 +148,7 @@ public class Maze {
             return null;
         }
     }
-
+    //totally honest not sure how this was supposed to work or whit it does
     private Node undo(Node inNode){
         Node temp = inNode;
         if(!inNode.getBase()) {
@@ -159,8 +159,7 @@ public class Maze {
         temp = checkNeighborsFor(temp, temp.getValue());
         return temp;
     }
-
-
+    //prints the node maze w/ out color... what a bore
     public void printMaze() {                       //will print out the maze, printing each nodes value which is a char
         for (int x = 0; x < mazeDim; x++) {
             for (int y = 0; y < mazeDim; y++) {
@@ -170,7 +169,7 @@ public class Maze {
         }
         System.out.println();
     }
-
+    //prints out a beautiful rainbow maze
     public void printColorMaze() {
         for (int x = 0; x < mazeDim; x++) {
             for (int y = 0; y < mazeDim; y++) {
