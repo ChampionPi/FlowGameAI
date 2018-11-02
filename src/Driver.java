@@ -16,7 +16,8 @@ public class Driver {
         fiveMaze.printColorBaseNodes();
         System.out.println();
         fiveMaze.dumbSolve();
-        fiveMaze.solveMaze();
+        Solver solvefive = new Solver(fiveMaze);
+//        fiveMaze.solveMaze();
         fiveMaze.printColorMaze();
 
 //        sevenMaze.printColorBaseNodes();

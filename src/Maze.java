@@ -40,15 +40,7 @@ public class Maze {
             }
         }
     }
-    //solves the maze, mostly just calls the other functions
-    public void solveMaze(){                                                                                            //will solve our maze
-        for(int x = 0; x < (baseNodesSize/2)-1; x++){
-            int secondNodeIndex = x + 1;
 
-        }
-
-        //TODO Solve the maze
-    }
     //theoretically you give it two nodes and it travels from one to other
     private void travelFromTo(Node inFirstNode, Node inSecondNode){
         int travelX = inFirstNode.getX() - inSecondNode.getX();
@@ -256,8 +248,6 @@ public class Maze {
     }
 
 
-    private void logicUpdate(){
 
-    }
 
 }
