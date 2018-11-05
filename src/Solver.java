@@ -1,9 +1,14 @@
 public class Solver {
+    Maze maze;
+
+    public Solver(Maze inM){
+        maze = inM;
 
 
-    public Solver(Maze m){
 
-        //TODO solve a thing
+
+
+        solveMaze();
     }
 
     //solves the maze, mostly just calls the other functions
@@ -17,6 +22,25 @@ public class Solver {
     }
 
     private void logicUpdate(){
+        Node[] baseNodes = maze.getBaseNodes();
+
+        for(int i=0;i<baseNodes.length;i++){
+
+        }
+
+
 
     }
+
+//    public boolean isConnected(Node base){ // takes base node and checks to see if flow is complete
+//
+//
+//
+//
+//
+//
+//
+//
+//    }
+
 }

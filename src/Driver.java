@@ -6,12 +6,12 @@ import java.util.ArrayList;
 public class Driver {
     public static void main(String[] args) throws IOException {
         Maze fiveMaze     = readMazeIn("5x5maze.txt");
-        Maze sevenMaze    = readMazeIn("7x7maze.txt");
-        Maze eightMaze    = readMazeIn("8x8maze.txt");
-        Maze nineMaze     = readMazeIn("9x9maze.txt");
-        Maze tenMaze      = readMazeIn("10x10maze.txt");
-        Maze twelveMaze   = readMazeIn("12x12maze.txt");
-        Maze fourteenMaze = readMazeIn("14x14maze.txt");
+//        Maze sevenMaze    = readMazeIn("7x7maze.txt");
+//        Maze eightMaze    = readMazeIn("8x8maze.txt");
+//        Maze nineMaze     = readMazeIn("9x9maze.txt");
+//        Maze tenMaze      = readMazeIn("10x10maze.txt");
+//        Maze twelveMaze   = readMazeIn("12x12maze.txt");
+//        Maze fourteenMaze = readMazeIn("14x14maze.txt");
 
         fiveMaze.printColorBaseNodes();
         System.out.println();
