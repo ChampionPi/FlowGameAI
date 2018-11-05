@@ -3,7 +3,7 @@ class Node {
     private int yCoord;
     private int numOptions;
     private char value;
-    private boolean base;
+    private boolean base; // If node is a source
     private boolean[] possibleValues;
 
     public Node (int inX, int inY, char inValue) {
