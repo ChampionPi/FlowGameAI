@@ -42,7 +42,6 @@ public class Maze {
     }
 
         //TODO Solve the maze
-    }
     //theoretically you give it two nodes and it travels from one to other
     private void travelFromTo(Node inFirstNode, Node inSecondNode){
         int travelX = inFirstNode.getX() - inSecondNode.getX();
