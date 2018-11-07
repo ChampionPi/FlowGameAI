@@ -3,7 +3,7 @@ class Node {
     private int yCoord;
     private int numOptions;
     private char value;
-    private boolean base;
+    private boolean base; // If node is a source
     private boolean[] possibleValues;
     private int flow; // tells which way flow should go 1=next 2=last 0= not base node
 
