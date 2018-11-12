@@ -14,6 +14,14 @@ class Node {
         value = inValue;
         base = value != '_';
         flow = 0;
+        base = (value != '_');
+    }
+
+    public Node (Node inNode) {
+        xCoord = inNode.getX();
+        yCoord = inNode.getY();
+        value = inNode.getValue();
+        base = inNode.getBase();
     }
 
 
