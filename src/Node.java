@@ -10,7 +10,14 @@ class Node {
         xCoord = inX;
         yCoord = inY;
         value = inValue;
-        base = value != '_';
+        base = (value != '_');
+    }
+
+    public Node (Node inNode) {
+        xCoord = inNode.getX();
+        yCoord = inNode.getY();
+        value = inNode.getValue();
+        base = inNode.getBase();
     }
 
     public int getX(){

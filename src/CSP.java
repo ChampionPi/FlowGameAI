@@ -60,6 +60,7 @@ public class CSP {
         for (int i = 0; i < nodeMaze.length; i++) {
             for (int j = 0; j < nodeMaze[i].length; i++) {
                 if (!has_been_visited[i][j]) ;  // TODO: visit the nodes here
+
             }
         }
 

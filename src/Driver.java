@@ -13,6 +13,12 @@ public class Driver {
         Maze twelveMaze   = readMazeIn("12x12maze.txt");
         Maze fourteenMaze = readMazeIn("14x14maze.txt");
 
+        Node node1 = new Node(1,1, '_');
+        Node node2 = new Node(node1);
+        node2.setValue('b');
+        System.out.println("value should be '_': " + node1.getValue());
+        System.out.println("value should be 'b': " + node2.getValue());
+
         fiveMaze.printColorBaseNodes();
         System.out.println();
         fiveMaze.dumbSolve();

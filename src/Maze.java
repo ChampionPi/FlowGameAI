@@ -1,8 +1,8 @@
 public class Maze {
 
     private Node[][] nodeMaze;          //holds the maze with each node containing all relevant information for that spot
-    private Node[] baseNodes;           //holds all nodes that had values when the maze was imported
-    private Node[] emptyNodes;          //holds all nodes that are empty when the maze in imported
+    private final Node[] baseNodes;     //holds all nodes that had values when the maze was imported
+    private final Node[] emptyNodes;    //holds all nodes that are empty when the maze in imported
     private Node temp;                  //general temp node to pass info around
     private int mazeDim;                //for 5x5 maze holds the number 5
     private int baseNodesSize = 0;      //numbers of basenodes, naturally counted starting at 1
