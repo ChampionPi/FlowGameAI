@@ -5,11 +5,17 @@ class Node {
     private char value;
     private boolean base; // If node is a source
     private boolean[] possibleValues;
+    private int flow; // tells which way flow should go 1=next 2=last 0= not base node
+    private Node next= null;
+    private Node last= null;
+
 
     public Node (int inX, int inY, char inValue) {
         xCoord = inX;
         yCoord = inY;
         value = inValue;
+        base = value != '_';
+        flow = 0;
         base = (value != '_');
     }
 
@@ -19,6 +25,8 @@ class Node {
         value = inNode.getValue();
         base = inNode.getBase();
     }
+
+
 
     public int getX(){
         return xCoord;
@@ -50,4 +58,19 @@ class Node {
     public Boolean getBase() {
         return base;
     }
+
+    public void setFlow(int inFlow){
+        flow = inFlow;
+    }
+
+    public int getFlow(){
+        return flow;
+    }
+
+    public Node getNext(){return next;}
+    public void setNext(Node in){next = in;}
+
+    public Node getLast(){return last;}
+    public void setLast(Node in){last = in;}
+
 }

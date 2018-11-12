@@ -39,6 +39,24 @@ public class Maze {
                 }
             }
         }
+        // add flow direction
+        char[] tempBase = new char[baseNodesSize];
+        System.out.print(baseNodesSize);
+        for(int i=0;i<baseNodesSize;i++){
+            Node inTemp = baseNodes[i];
+
+            for(int k=i;k>=0;k--){
+                //System.out.println(k);
+                if(inTemp.getValue()==tempBase[k]){
+                    inTemp.setFlow(2);
+                    break;
+                }
+
+                inTemp.setFlow(1);
+            }
+            tempBase[i] =inTemp.getValue();
+            System.out.println(inTemp.getValue()+" flows "+inTemp.getFlow());
+        }
     }
 
         //TODO Solve the maze
@@ -93,7 +111,7 @@ public class Maze {
         }
     }
 
-    private Node [] checkNeighborsFor(Node inNode){                                               //can be used to find empty spaces or partner
+    public Node [] checkNeighborsFor(Node inNode){                                               //can be used to find empty spaces or partner
 
         Node temp [] = new Node [3];
 
@@ -248,6 +266,10 @@ public class Maze {
         System.out.println();
     }
 
+    public Node[] getBaseNodes(){
+        return baseNodes;
+
+    }
 
 
 
