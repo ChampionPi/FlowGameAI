@@ -111,7 +111,7 @@ public class Maze {
         }
     }
 
-    private Node [] checkNeighborsFor(Node inNode){                                               //can be used to find empty spaces or partner
+    public Node [] checkNeighborsFor(Node inNode){                                               //can be used to find empty spaces or partner
 
         Node temp [] = new Node [3];
 
@@ -270,5 +270,7 @@ public class Maze {
         return baseNodes;
 
     }
+
+
 
 }

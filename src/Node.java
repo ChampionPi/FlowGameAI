@@ -6,6 +6,8 @@ class Node {
     private boolean base; // If node is a source
     private boolean[] possibleValues;
     private int flow; // tells which way flow should go 1=next 2=last 0= not base node
+    private Node next= null;
+    private Node last= null;
 
 
     public Node (int inX, int inY, char inValue) {
@@ -64,4 +66,11 @@ class Node {
     public int getFlow(){
         return flow;
     }
+
+    public Node getNext(){return next;}
+    public void setNext(Node in){next = in;}
+
+    public Node getLast(){return last;}
+    public void setLast(Node in){last = in;}
+
 }
