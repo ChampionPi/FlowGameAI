@@ -271,6 +271,9 @@ public class Maze {
 
     }
 
+    public Node[][] getNodeArray(){
+        return nodeMaze;
+    }
 
 
 }

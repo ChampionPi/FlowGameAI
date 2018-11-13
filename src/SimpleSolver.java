@@ -1,16 +1,26 @@
+import java.util.ArrayList;
+
 public class SimpleSolver {
-
-
+    private final Maze initialMaze;
+    private Node[][] nodes;
 
 
 
     public SimpleSolver(Maze inMaze){
+        initialMaze = inMaze;
+        nodes = inMaze.getNodeArray();
+
+        mazeDFS(nodes, inMaze);
+
+    }
+
+    private Node[][] mazeDFS(Node[][] nodes, Maze inMaze) {
+        // TODO: Colter's logic
+        ArrayList<Integer> directions;
 
 
 
-
-
-
+        return null;
     }
 
 
@@ -92,6 +102,7 @@ public class SimpleSolver {
 
 
 
+        return null;
     }
 
 }
