@@ -1,5 +1,8 @@
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
@@ -15,7 +18,7 @@ public class SimpleSolver {
 
         mazeDFS(nodes, inMaze);
 
-        Node[][]in = inMaze.getNodeMaze();
+        Node[][] in = inMaze.getNodeMaze();
         Node[] Base = inMaze.getBaseNodes();
 
         printBase(Base);
@@ -25,26 +28,47 @@ public class SimpleSolver {
 
         printMaze(in);
 
+        mazeDFS(in, inMaze);
     }
 
     private Node[][] mazeDFS(Node[][] nodeMaze, Maze inMaze) {
         // TODO: Colter's logic
 
-        Map<Node,Integer> directions; // maps nodes to directions, 0 for right
+        Map<Character, Integer> baseNodeMap = null;
 
+        // double loop to iterate over node maze
         for (int i = 0; i < nodeMaze.length; i++) {
             for (int j = 0; j < nodeMaze.length; j++) {
 
+                Node currentNode = nodeMaze[i][j];
 
+                // if the node at position i,j is a base node add to the count of base nodes
+                if (currentNode.getBase()) {
+
+                    if(baseNodeMap == null || !baseNodeMap.containsKey(currentNode.getValue())) {
+                        baseNodeMap.put(currentNode.getValue(), 1);
+                    }
+
+                    else if (baseNodeMap.get(currentNode.getValue()) == 1) {
+
+                        baseNodeMap.replace(currentNode.getValue(), 2);
+                    }
+
+                    else System.out.println("A base node exists 3 or more times, fault.");
+                }
 
             }
         }
 
+        for (Node baseNode : inMaze.getBaseNodes()) {
+            System.out.println("Maze node " + baseNode.getValue() + "in maze " + baseNodeMap.get(baseNode.getValue()) + "times.");
+        }
 
         return null;
     }
 
-
+    // Method to determine if there are any positions on the maze that must be a color,
+    // by checking if there is a path that could only have 1 valid extension
     public Node[][] logicUpdate(Node [][] in, Node [] Base){
 
 
@@ -55,7 +79,7 @@ public class SimpleSolver {
             Node temp = Base[i];
             temp = findEnd(temp, temp, in);
 
-            System.out.println("check at "+temp.getValue());
+            //System.out.println("check at "+temp.getValue());
             if(temp.getValue()=='#'){}
             else {
                 int only = ifOnly(temp, in);         // return direction of next flow
@@ -83,10 +107,10 @@ public class SimpleSolver {
         return in;
     }
 
-    public Node findEnd(Node temp,Node last, Node [][] in){
+    public Node findEnd(Node temp, Node last, Node [][] in){
 
         Node [] arr = checkNeighborsFor(temp,in);
-        System.out.println("findEnd temp "+temp.getX()+", "+temp.getY());
+        //System.out.println("findEnd temp "+temp.getX()+", "+temp.getY());
         int count = 0;
         Node option= null;
 
@@ -100,16 +124,17 @@ public class SimpleSolver {
                 }
             }
         }
+
         if(temp == last){   // at first base node
             if(count == 0){
                 return(temp);
             }
             if(count ==1){
-                System.out.println("found from base "+ option.getValue());
+                //System.out.println("found from base "+ option.getValue());
                 temp = findEnd(option,temp,in);
             }
             else{
-                System.out.println("base node w multiple same surrounding");
+                //System.out.println("base node w multiple same surrounding");
                 return null;
             }
         }
@@ -130,10 +155,10 @@ public class SimpleSolver {
         return temp;
     }
 
-    public Node [] checkNeighborsFor(Node inNode, Node [][] maze){                                               //can be used to find empty spaces or partner
+    public Node [] checkNeighborsFor(Node inNode, Node [][] maze){  //can be used to find empty spaces or partner
 
         Node temp [] = new Node [4];
-        System.out.println("Check Neighbors of "+inNode.getValue()+ " at  x "+ inNode.getX()+" y "+inNode.getY());
+        //System.out.println("Check Neighbors of "+inNode.getValue()+ " at  x "+ inNode.getX()+" y "+inNode.getY());
 
         if( 0 <= inNode.getY() + 1 && inNode.getY() + 1 < maze.length){ // add right node to array
             temp[1]= maze[inNode.getX()][inNode.getY()+1];
@@ -151,7 +176,7 @@ public class SimpleSolver {
 
     }
 
-    public int ifOnly(Node temp, Node [][] maze){                  // checks if there is only one spot to go
+    public int ifOnly(Node temp, Node [][] maze){ // checks if there is only one spot to go
         Node [] neighbors = checkNeighborsFor(temp, maze);
         //System.out.println("ifOnly neighbors of "+temp.getX()+", "+ temp.getY());
         printBase(neighbors);
@@ -197,10 +222,10 @@ public class SimpleSolver {
     public void printBase(Node[] base){  // prints node array
         for (int i = 0; i < base.length; i++) {
             if(base[i]== null){
-                System.out.print("null, ");
+                //System.out.print("null, ");
             }
             else {
-                System.out.print(base[i].getValue() + ", ");
+                //System.out.print(base[i].getValue() + ", ");
             }
         }
         System.out.println();
