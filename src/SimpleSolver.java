@@ -30,22 +30,27 @@ public class SimpleSolver {
             Node temp = Base[i];
             temp = findEnd(temp, temp, in);
 
-            int only = ifOnly(temp,in);         // return direction of next flow
-            if(only==0){                    //up  -X
-                in= update(in, temp,in[temp.getX()-1][temp.getY()]);
-                logicUpdate(in, Base);
-            }
-            if(only==1){                    //Right +Y
-                in=update(in, temp,in[temp.getX()][temp.getY()+1]);
-                logicUpdate(in, Base);
-            }
-            if(only==2){                    //Down  +X
-                in=update(in, temp,in[temp.getX()+1][temp.getY()]);
-                logicUpdate(in, Base);
-            }
-            if(only==3){                    //Left -Y
-                in=update(in, temp,in[temp.getX()][temp.getY()-1]);
-                logicUpdate(in, Base);
+            System.out.println("check at "+temp.getValue());
+            if(temp.getValue()=='#'){}
+            else {
+                int only = ifOnly(temp, in);         // return direction of next flow
+
+                if (only == 0) {                    //up  -X
+                    in = update(in, temp, in[temp.getX() - 1][temp.getY()]);
+                    logicUpdate(in, Base);
+                }
+                if (only == 1) {                    //Right +Y
+                    in = update(in, temp, in[temp.getX()][temp.getY() + 1]);
+                    logicUpdate(in, Base);
+                }
+                if (only == 2) {                    //Down  +X
+                    in = update(in, temp, in[temp.getX() + 1][temp.getY()]);
+                    logicUpdate(in, Base);
+                }
+                if (only == 3) {                    //Left -Y
+                    in = update(in, temp, in[temp.getX()][temp.getY() - 1]);
+                    logicUpdate(in, Base);
+                }
             }
             i++;
         }
@@ -83,8 +88,9 @@ public class SimpleSolver {
                 return null;
             }
         }
-        else if(temp.getBase()){    // flow complete
-            return temp;
+        else if(temp.getBase()){    // flow complete******
+            Node blank = new Node(-1,-1,'#');
+            return blank;
         }
         else if(count == 1){        // at end of flow
             return temp;
@@ -102,7 +108,7 @@ public class SimpleSolver {
     public Node [] checkNeighborsFor(Node inNode, Node [][] maze){                                               //can be used to find empty spaces or partner
 
         Node temp [] = new Node [4];
-        System.out.println("Check Neighbors at  x "+ inNode.getX()+" y "+inNode.getY());
+        System.out.println("Check Neighbors of "+inNode.getValue()+ " at  x "+ inNode.getX()+" y "+inNode.getY());
 
         if( 0 <= inNode.getY() + 1 && inNode.getY() + 1 < maze.length){ // add right node to array
             temp[1]= maze[inNode.getX()][inNode.getY()+1];
