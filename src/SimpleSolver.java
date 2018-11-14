@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Map;
 
 public class SimpleSolver {
     private final Maze initialMaze;
@@ -14,10 +15,18 @@ public class SimpleSolver {
 
     }
 
-    private Node[][] mazeDFS(Node[][] nodes, Maze inMaze) {
+    private Node[][] mazeDFS(Node[][] nodeMaze, Maze inMaze) {
         // TODO: Colter's logic
-        ArrayList<Integer> directions;
 
+        Map<Node,Integer> directions; // maps nodes to directions, 0 for right
+
+        for (int i = 0; i < nodeMaze.length; i++) {
+            for (int j = 0; j < nodeMaze.length; j++) {
+
+
+
+            }
+        }
 
 
         return null;
