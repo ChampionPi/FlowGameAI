@@ -25,6 +25,7 @@ public class Driver {
 
 //        fiveMaze.solveMaze();
         fiveMaze.printColorMaze();
+        new SimpleSolver(fiveMaze);
 
 //        sevenMaze.printColorBaseNodes();
 //        sevenMaze.printColorMaze();

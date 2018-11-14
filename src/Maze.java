@@ -40,23 +40,23 @@ public class Maze {
             }
         }
         // add flow direction
-        char[] tempBase = new char[baseNodesSize];
-        System.out.print(baseNodesSize);
-        for(int i=0;i<baseNodesSize;i++){
-            Node inTemp = baseNodes[i];
-
-            for(int k=i;k>=0;k--){
-                //System.out.println(k);
-                if(inTemp.getValue()==tempBase[k]){
-                    inTemp.setFlow(2);
-                    break;
-                }
-
-                inTemp.setFlow(1);
-            }
-            tempBase[i] =inTemp.getValue();
-            System.out.println(inTemp.getValue()+" flows "+inTemp.getFlow());
-        }
+//        char[] tempBase = new char[baseNodesSize];
+//        System.out.print(baseNodesSize);
+//        for(int i=0;i<baseNodesSize;i++){
+//            Node inTemp = baseNodes[i];
+//
+//            for(int k=i;k>=0;k--){
+//                //System.out.println(k);
+//                if(inTemp.getValue()==tempBase[k]){
+//                    inTemp.setFlow(2);
+//                    break;
+//                }
+//
+//                inTemp.setFlow(1);
+//            }
+//            tempBase[i] =inTemp.getValue();
+//            System.out.println(inTemp.getValue()+" flows "+inTemp.getFlow());
+//        }
     }
 
         //TODO Solve the maze
@@ -271,6 +271,8 @@ public class Maze {
 
     }
 
-
+    public Node[][] getNodeMaze(){
+        return nodeMaze;
+    }
 
 }
