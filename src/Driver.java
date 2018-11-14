@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Driver {
     public static void main(String[] args) throws IOException {
         Maze fiveMaze     = readMazeIn("5x5maze.txt");
-//        Maze sevenMaze    = readMazeIn("7x7maze.txt");
+        Maze sevenMaze    = readMazeIn("7x7maze.txt");
 //        Maze eightMaze    = readMazeIn("8x8maze.txt");
 //        Maze nineMaze     = readMazeIn("9x9maze.txt");
 //        Maze tenMaze      = readMazeIn("10x10maze.txt");
@@ -25,9 +25,11 @@ public class Driver {
 
 //        fiveMaze.solveMaze();
         fiveMaze.printColorMaze();
+        new SimpleSolver(fiveMaze);
 
-//        sevenMaze.printColorBaseNodes();
-//        sevenMaze.printColorMaze();
+        sevenMaze.printColorBaseNodes();
+        sevenMaze.printColorMaze();
+        new SimpleSolver((sevenMaze));
 //
 //        eightMaze.printColorBaseNodes();
 //        eightMaze.printColorMaze();
