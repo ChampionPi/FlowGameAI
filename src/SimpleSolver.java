@@ -1,5 +1,7 @@
-import java.security.Key;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.lang.reflect.Array;
 import java.util.*;
+import java.lang.Math;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
@@ -7,13 +9,18 @@ public class SimpleSolver {
     private final Maze initialMaze;
     private Node[][] nodes;
     private final Node blank = new Node(-1,-1,'#');
-
+    private ArrayList<HashMap<Node, Integer>> directionArray = new ArrayList<>();
+    private ArrayList<ArrayList<Node>> nodeArrayList = new ArrayList<>();
 
     public SimpleSolver(Maze inMaze){
         initialMaze = inMaze;
         nodes = inMaze.getNodeMaze();
 
-        mazeDFS(nodes, inMaze);
+//        newDFS(inMaze.getNodeMaze(), inMaze);
+//        mazeDFS(nodes, inMaze);
+        logicUpdate(inMaze.getNodeMaze(),inMaze.getBaseNodes());
+        pathDFS(inMaze.getNodeMaze(), inMaze.getBaseNodes()[0], inMaze.getBaseNodes()[0]);
+        inMaze.printColorMaze();
 
 //        Node[][] in = inMaze.getNodeMaze();
 //        Node[] Base = inMaze.getBaseNodes();
@@ -28,10 +35,58 @@ public class SimpleSolver {
 
     }
 
+    private Node[][] newDFS(Node[][] nodeMaze, Maze inMaze) {
+        Node[] baseNodes = inMaze.getBaseNodes();
+
+        for (Node base : baseNodes) {
+
+            if(findEnd(base,base,nodeMaze) != blank) { // if it isn't connected already
+                recursiveSearch(nodeMaze,base);
+
+            }
+
+        }
+
+        return null;
+    }
+
+    private void recursiveSearch(Node[][] nodeMaze, Node base) {
+        Node currentNode = findEnd(base,base,nodeMaze); // find the node at the end of it's path
+
+        HashMap<Node, Integer> directionMap = new HashMap<>(); // create a hash map for directions from each node
+        ArrayList<Node> nodeList = new ArrayList<>(); // arraylist to keep track of order of mappings
+
+        directionMap.put(currentNode, 0); // add current node with a direction of 0 (up)
+        nodeList.add(currentNode);
+
+        directionArray.add(directionMap); // add the hash map to the direction array to store across method calls
+        nodeArrayList.add(nodeList);
+
+
+        boolean hasFoundOtherBase = false;
+        while (!hasFoundOtherBase) {
+            currentNode = nodeList.get(directionMap.size());
+            Node neighbor = neighborInDirection(nodeMaze, currentNode, directionMap.get(currentNode));
+            if (neighbor != null) {
+
+                // if the neighbor is the same color and connected to the other base
+                if (neighbor.getValue() == base.getValue() && connectedBase(nodeMaze,neighbor) != base) {
+                    currentNode.setValue(base.getValue());
+                    hasFoundOtherBase = true;
+                }
+
+                // else if the neighbor is blank
+                else if (neighbor.getValue() == '_') {
+                    currentNode.setValue(base.getValue());
+
+                }
+            }
+        }
+    }
+
     private Node[][] mazeDFS(Node[][] nodeMaze, Maze inMaze) {
-        // TODO: Colter's logic
         nodeMaze = logicUpdate(nodeMaze, inMaze.getBaseNodes());
-        //inMaze.printColorMaze();
+//        inMaze.printColorMaze();
 
         HashMap<Character, Integer> baseNodeMap = new HashMap<>();
 
@@ -46,47 +101,97 @@ public class SimpleSolver {
                 Node baseNode = currentNode;
                 currentNode = findEnd(currentNode, currentNode, nodeMaze); // find the end of the path from the base
                 if (currentNode != blank) {
-                    LinkedHashMap<Node, Integer> directionMap = new LinkedHashMap<>(); // hash map of directions to nodes, to keep track of direction paths have traveled
-                    directionMap = pathDFS(nodeMaze, currentNode, directionMap, baseNode);
+                    pathDFS(nodeMaze, currentNode, baseNode);
+//                    printMaze(nodeMaze);
                 }
                 baseNodeMap.replace(baseNode.getValue(), 2);
             }
             else System.out.println("A base node exists 3 or more times, fault.");
         }
 
-        return null;
+        //System.out.println("I think this means its working");
+        return nodeMaze;
     }
 
-    private LinkedHashMap pathDFS(Node[][] nodeMaze, Node currentNode, LinkedHashMap<Node,Integer> directionMap, Node baseNode) {
-        directionMap.put(currentNode, 0); // initialize with a zero direction, i.e. up
-        Node[] neighbors = checkNeighborsFor(currentNode,nodeMaze);
+    private int pathDFS(Node[][] nodeMaze, Node currentNode, Node baseNode) {
+        printMaze(nodeMaze);
+        ArrayList<Node> pathNodes = new ArrayList<>();
+        Node[] neighbors = checkNeighborsFor(currentNode, nodeMaze);
 
-        for (int i = 0; i < 4; i++) { // for each neighbor
-            if (neighbors[i] != null) {
-                if (neighbors[i].getValue() == baseNode.getValue()) { // if the neighbor is the same color as the base
-                    // if the neighbor connects to the other base node
-                    if( connectedBase(nodeMaze, neighbors[i]) != baseNode) {
-                        currentNode.setValue(baseNode.getValue());
-                        directionMap.replace(currentNode, i);
-                        return directionMap;
+        neighbors = shuffle(neighbors);
 
-                    }
+        currentNode.setValue(baseNode.getValue());
+
+        for (Node neighbor : neighbors) { // for each node around current
+            if (neighbor != null) { // if the neighbor isn't null
+
+                // if the neighbor is the same color as the base and not connected to the base
+                if (neighbor.getValue() == baseNode.getValue() && connectedBase(nodeMaze,neighbor) != baseNode) {
+                    pathNodes.add(currentNode);
+                    return 0;
                 }
 
-                if (neighbors[i].getValue() == '_') { // if the neighbor is blank
+            }
 
-                    currentNode.setValue(baseNode.getValue()); // set the current position to the base node color
-                    directionMap.replace(currentNode, i); // replace the direction with the direction to the neighbor
+        }
 
-                    directionMap = pathDFS(nodeMaze, neighbors[i], directionMap, baseNode);
-
+        for (Node neighbor : neighbors) { // for each node around current
+            if (neighbor != null) { // if the neighbor isn't null
+                if (neighbor.getValue() == '_') { // and is blank
+                    int returnMe = pathDFS(nodeMaze, neighbor, baseNode);
+                    if (returnMe == 0) return returnMe;
                 }
             }
         }
 
         currentNode.setValue('_');
+        System.out.println("Bad News Bears");
+        return 1;
+    }
 
-        return directionMap;
+    private Node[] shuffle(Node[] neighbors) {
+        ArrayList<Node> oldNeighbors = new ArrayList<>();
+
+        for (Node node : neighbors) oldNeighbors.add(node);
+
+        Node[] newNeighbors = new Node[neighbors.length];
+
+        int firstNeighbor = (int) (Math.random()*4);
+        int secondNeighbor = (int) (Math.random()*3);
+        int thirdNeighbor = (int) (Math.random()*2);
+
+        newNeighbors[0] = oldNeighbors.get(firstNeighbor);
+        oldNeighbors.remove(newNeighbors[0]);
+
+        newNeighbors[1] = oldNeighbors.get(secondNeighbor);
+        oldNeighbors.remove(newNeighbors[1]);
+
+        newNeighbors[2] = oldNeighbors.get(thirdNeighbor);
+        oldNeighbors.remove(newNeighbors[2]);
+
+        newNeighbors[3] = oldNeighbors.get(0);
+        oldNeighbors.remove(newNeighbors[3]);
+
+        return newNeighbors;
+    }
+
+    // method to return the node in a given direction
+    private Node neighborInDirection(Node[][] nodeMaze, Node currentNode, int direction) {
+        switch (direction) {
+            case 0:
+                if (currentNode.getX() > 0) return nodeMaze[currentNode.getX()-1][currentNode.getY()];
+                else return null;
+            case 1:
+                if (currentNode.getY() < nodeMaze.length - 1) return nodeMaze[currentNode.getX()][currentNode.getY()+1];
+                else return null;
+            case 2:
+                if (currentNode.getX() < nodeMaze.length -1) return nodeMaze[currentNode.getX()+1][currentNode.getY()];
+                else return null;
+            case 3:
+                if (currentNode.getY() > 0) return nodeMaze[currentNode.getX()][currentNode.getY()-1];
+                else return null;
+            default: return null;
+        }
     }
 
     // method to return the base node connected to a non base node
