@@ -1,16 +1,11 @@
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 public class SimpleSolver {
     private final Maze initialMaze;
     private Node[][] nodes;
-
-
 
     public SimpleSolver(Maze inMaze){
         initialMaze = inMaze;
@@ -33,39 +28,38 @@ public class SimpleSolver {
 
     private Node[][] mazeDFS(Node[][] nodeMaze, Maze inMaze) {
         // TODO: Colter's logic
+        HashMap<Character, Integer> baseNodeMap = new HashMap<>();
 
-        Map<Character, Integer> baseNodeMap = null;
-
-        // double loop to iterate over node maze
-        for (int i = 0; i < nodeMaze.length; i++) {
-            for (int j = 0; j < nodeMaze.length; j++) {
-
-                Node currentNode = nodeMaze[i][j];
-
-                // if the node at position i,j is a base node add to the count of base nodes
-                if (currentNode.getBase()) {
-
-                    if(baseNodeMap == null || !baseNodeMap.containsKey(currentNode.getValue())) {
-                        baseNodeMap.put(currentNode.getValue(), 1);
-                    }
-
-                    else if (baseNodeMap.get(currentNode.getValue()) == 1) {
-
-                        baseNodeMap.replace(currentNode.getValue(), 2);
-                    }
-
-                    else System.out.println("A base node exists 3 or more times, fault.");
-                }
-
+        // for each base node, add it to a hash map to see if it has been reached twice
+        for (Node currentNode : inMaze.getBaseNodes()) {
+            if ( currentNode == null ) {
+                System.out.println("why does this return a null Node");
+                break; }
+            if (!baseNodeMap.containsKey(currentNode.getValue())) {
+                baseNodeMap.put(currentNode.getValue(), 1);
             }
-        }
+            else if (baseNodeMap.get(currentNode.getValue()) == 1) { // when we have found the 2nd instance of a color's base
+                currentNode = findEnd(currentNode, currentNode, nodeMaze); // find the end of the path from the base
 
-        for (Node baseNode : inMaze.getBaseNodes()) {
-            System.out.println("Maze node " + baseNode.getValue() + "in maze " + baseNodeMap.get(baseNode.getValue()) + "times.");
+                HashMap<Node, Integer> directionMap = new HashMap<>(); // hash map of directions to nodes, to keep track of direction paths have traveled
+                pathDFS(nodeMaze, currentNode, directionMap);
+
+
+                baseNodeMap.replace(currentNode.getValue(), 2);
+            }
+            else System.out.println("A base node exists 3 or more times, fault.");
         }
 
         return null;
     }
+
+    private void pathDFS(Node[][] nodeMaze, Node currentNode, HashMap<Node,Integer> directionMap) {
+        directionMap.put(currentNode, 0); // initialize with a zero direction, i.e. up
+
+
+
+    }
+
 
     // Method to determine if there are any positions on the maze that must be a color,
     // by checking if there is a path that could only have 1 valid extension
