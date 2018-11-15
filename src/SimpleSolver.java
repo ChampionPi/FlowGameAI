@@ -6,6 +6,8 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 public class SimpleSolver {
     private final Maze initialMaze;
     private Node[][] nodes;
+    private final Node blank = new Node(-1,-1,'#');
+
 
     public SimpleSolver(Maze inMaze){
         initialMaze = inMaze;
@@ -13,39 +15,41 @@ public class SimpleSolver {
 
         mazeDFS(nodes, inMaze);
 
-        Node[][] in = inMaze.getNodeMaze();
-        Node[] Base = inMaze.getBaseNodes();
+//        Node[][] in = inMaze.getNodeMaze();
+//        Node[] Base = inMaze.getBaseNodes();
+//
+//        printBase(Base);
+//        printMaze(in);
+//
+//        in = logicUpdate(in,Base);
+//        initialMaze.printColorMaze();
 
-        printBase(Base);
-        printMaze(in);
+        //printMaze(in);
 
-        in = logicUpdate(in,Base);
-
-        printMaze(in);
-
-        mazeDFS(in, inMaze);
     }
 
     private Node[][] mazeDFS(Node[][] nodeMaze, Maze inMaze) {
         // TODO: Colter's logic
+        nodeMaze = logicUpdate(nodeMaze, inMaze.getBaseNodes());
+        //inMaze.printColorMaze();
+
         HashMap<Character, Integer> baseNodeMap = new HashMap<>();
 
         // for each base node, add it to a hash map to see if it has been reached twice
         for (Node currentNode : inMaze.getBaseNodes()) {
             if ( currentNode == null ) {
-                System.out.println("why does this return a null Node");
                 break; }
             if (!baseNodeMap.containsKey(currentNode.getValue())) {
                 baseNodeMap.put(currentNode.getValue(), 1);
             }
             else if (baseNodeMap.get(currentNode.getValue()) == 1) { // when we have found the 2nd instance of a color's base
+                Node baseNode = currentNode;
                 currentNode = findEnd(currentNode, currentNode, nodeMaze); // find the end of the path from the base
-
-                HashMap<Node, Integer> directionMap = new HashMap<>(); // hash map of directions to nodes, to keep track of direction paths have traveled
-                pathDFS(nodeMaze, currentNode, directionMap);
-
-
-                baseNodeMap.replace(currentNode.getValue(), 2);
+                if (currentNode != blank) {
+                    LinkedHashMap<Node, Integer> directionMap = new LinkedHashMap<>(); // hash map of directions to nodes, to keep track of direction paths have traveled
+                    directionMap = pathDFS(nodeMaze, currentNode, directionMap, baseNode);
+                }
+                baseNodeMap.replace(baseNode.getValue(), 2);
             }
             else System.out.println("A base node exists 3 or more times, fault.");
         }
@@ -53,11 +57,57 @@ public class SimpleSolver {
         return null;
     }
 
-    private void pathDFS(Node[][] nodeMaze, Node currentNode, HashMap<Node,Integer> directionMap) {
+    private LinkedHashMap pathDFS(Node[][] nodeMaze, Node currentNode, LinkedHashMap<Node,Integer> directionMap, Node baseNode) {
         directionMap.put(currentNode, 0); // initialize with a zero direction, i.e. up
+        Node[] neighbors = checkNeighborsFor(currentNode,nodeMaze);
 
+        for (int i = 0; i < 4; i++) { // for each neighbor
+            if (neighbors[i] != null) {
+                if (neighbors[i].getValue() == baseNode.getValue()) { // if the neighbor is the same color as the base
+                    // if the neighbor connects to the other base node
+                    if( connectedBase(nodeMaze, neighbors[i]) != baseNode) {
+                        currentNode.setValue(baseNode.getValue());
+                        directionMap.replace(currentNode, i);
+                        return directionMap;
 
+                    }
+                }
 
+                if (neighbors[i].getValue() == '_') { // if the neighbor is blank
+
+                    currentNode.setValue(baseNode.getValue()); // set the current position to the base node color
+                    directionMap.replace(currentNode, i); // replace the direction with the direction to the neighbor
+
+                    directionMap = pathDFS(nodeMaze, neighbors[i], directionMap, baseNode);
+
+                }
+            }
+        }
+
+        currentNode.setValue('_');
+
+        return directionMap;
+    }
+
+    // method to return the base node connected to a non base node
+    private Node connectedBase(Node[][] nodeMaze, Node startNode) {
+        Node currentNode = startNode;
+        Node lastNode = currentNode;
+
+        // while the current node isn't a base node
+        while (!currentNode.getBase()) {
+            Node[] neighbors = checkNeighborsFor(currentNode,nodeMaze); // find neighbors
+            for (Node node : neighbors) { // for each neighbor
+                if (node != null) {
+                    if (node.getValue() == currentNode.getValue() && node != lastNode) { // if the neighbor is the same color and not the last node
+                        lastNode = currentNode;
+                        currentNode = node; // make that the current node
+                    }
+                }
+            }
+        }
+
+        return currentNode;
     }
 
 
@@ -66,7 +116,7 @@ public class SimpleSolver {
     public Node[][] logicUpdate(Node [][] in, Node [] Base){
 
 
-        printMaze(in);
+        //printMaze(in);
         int i=0;
 
         while(Base[i]!= null){
@@ -133,7 +183,6 @@ public class SimpleSolver {
             }
         }
         else if(temp.getBase()){    // flow complete******
-            Node blank = new Node(-1,-1,'#');
             return blank;
         }
         else if(count == 1){        // at end of flow
@@ -173,7 +222,7 @@ public class SimpleSolver {
     public int ifOnly(Node temp, Node [][] maze){ // checks if there is only one spot to go
         Node [] neighbors = checkNeighborsFor(temp, maze);
         //System.out.println("ifOnly neighbors of "+temp.getX()+", "+ temp.getY());
-        printBase(neighbors);
+        //printBase(neighbors);
 
         int spots =0;     // keep track of open spots
         int spot = -1;
@@ -198,7 +247,7 @@ public class SimpleSolver {
         in[x][y] = change;
 
         //System.out.println(" update at "+x+", "+y+" to "+ change.getValue()+ " complete");
-        printMaze( in);
+        //printMaze( in);
         return in;
     }
 

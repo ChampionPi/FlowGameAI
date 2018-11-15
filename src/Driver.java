@@ -20,11 +20,13 @@ public class Driver {
 //        fiveMaze.solveMaze();
         fiveMaze.printColorMaze();
         new SimpleSolver(fiveMaze);
+        System.out.println("Final 5x5 Maze");
         fiveMaze.printColorMaze();
 
         //sevenMaze.printColorBaseNodes();
         sevenMaze.printColorMaze();
         new SimpleSolver((sevenMaze));
+        System.out.println("Final 7x7 Maze");
         sevenMaze.printColorMaze();
 //
 //        eightMaze.printColorBaseNodes();
