@@ -1,6 +1,10 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Maze {
 
     private Node[][] nodeMaze;          //holds the maze with each node containing all relevant information for that spot
+    private Node[][] initialMaze;
     private final Node[] baseNodes;     //holds all nodes that had values when the maze was imported
     private final Node[] emptyNodes;    //holds all nodes that are empty when the maze in imported
     private Node temp;                  //general temp node to pass info around
@@ -28,8 +32,8 @@ public class Maze {
         nodeMaze = new Node[mazeDim][mazeDim];
         for (int y = 0; y < mazeDim; y++) {
             for (int x = 0; x < mazeDim; x++) {
-                Node temp = new Node(x, y, textMaze[x][y]);
-                nodeMaze[x][y] = temp;
+                Node temp = new Node(y, x, textMaze[y][x]);
+                nodeMaze[y][x] = temp;
                 if (temp.getBase()) {
                     baseNodes[baseNodesSize] = temp;
                     baseNodesSize++;
@@ -39,6 +43,8 @@ public class Maze {
                 }
             }
         }
+        initialMaze = new Node[mazeDim][mazeDim];
+        initialMaze = setInitialMaze(nodeMaze);
         // add flow direction
 //        char[] tempBase = new char[baseNodesSize];
 //        System.out.print(baseNodesSize);
@@ -271,8 +277,42 @@ public class Maze {
 
     }
 
+    // method to find the first occurrence of every base node
+    public Node[] getFirstBaseNodes() {
+        HashMap<Character, Integer> valueMap = new HashMap<>();
+        ArrayList<Node> firstBaseNodes = new ArrayList<>();
+        for (Node baseNode : baseNodes) {
+            if (baseNode != null) {
+                if (!valueMap.containsKey(baseNode.getValue())) {
+                    valueMap.put(baseNode.getValue(), 0);
+                    firstBaseNodes.add(baseNode);
+                    // System.out.println("added node "+baseNode.getValue() + " in Maze getFirstBaseNodes().");
+                }
+            }
+        }
+
+        Node[] newNodeArray = new Node[firstBaseNodes.size()];
+        for (int i = 0; i < newNodeArray.length; i++) {
+            newNodeArray[i] = firstBaseNodes.get(i);
+        }
+        return newNodeArray;
+    }
+
     public Node[][] getNodeMaze(){
         return nodeMaze;
+    }
+
+    private Node[][] setInitialMaze(Node[][] initialNodes) {
+        for (int i = 0; i < initialNodes.length; i++) {
+            for (int j = 0; j < initialNodes.length; j++) {
+                initialMaze[i][j] = new Node(initialNodes[i][j]);
+            }
+        }
+        return initialMaze;
+    }
+
+    public void reset() {
+        nodeMaze = initialMaze;
     }
 
 }

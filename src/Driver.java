@@ -7,10 +7,10 @@ public class Driver {
     public static void main(String[] args) throws IOException {
         Maze fiveMaze     = readMazeIn("5x5maze.txt");
         Maze sevenMaze    = readMazeIn("7x7maze.txt");
-//        Maze eightMaze    = readMazeIn("8x8maze.txt");
-//        Maze nineMaze     = readMazeIn("9x9maze.txt");
-//        Maze tenMaze      = readMazeIn("10x10maze.txt");
-//        Maze twelveMaze   = readMazeIn("12x12maze.txt");
+        Maze eightMaze    = readMazeIn("8x8maze.txt");
+        Maze nineMaze     = readMazeIn("9x9maze.txt");
+        Maze tenMaze      = readMazeIn("10x10maze.txt");
+        Maze twelveMaze   = readMazeIn("12x12maze.txt");
 //        Maze fourteenMaze = readMazeIn("14x14maze.txt");
 
 //        fiveMaze.printColorBaseNodes();
@@ -18,6 +18,7 @@ public class Driver {
         //fiveMaze.dumbSolve();
 
 //        fiveMaze.solveMaze();
+        System.out.println("Initial Maze");
         fiveMaze.printColorMaze();
         new SimpleSolver(fiveMaze);
         System.out.println("Final 5x5 Maze");
@@ -29,16 +30,24 @@ public class Driver {
         System.out.println("Final 7x7 Maze");
         sevenMaze.printColorMaze();
 //
-//        eightMaze.printColorBaseNodes();
 //        eightMaze.printColorMaze();
-//
-//        nineMaze.printColorBaseNodes();
+//        new SimpleSolver(eightMaze);
+//        System.out.println("Final 8x8 Maze");
+//        eightMaze.printColorMaze();
+////
 //        nineMaze.printColorMaze();
-//
-//        tenMaze.printColorBaseNodes();
+//        new SimpleSolver(nineMaze);
+//        System.out.println("Final 9x9 Maze");
+//        nineMaze.printColorMaze();
+////
 //        tenMaze.printColorMaze();
-//
-//        twelveMaze.printColorBaseNodes();
+//        new SimpleSolver(tenMaze);
+//        System.out.println("Final 10x10 Maze");
+//        tenMaze.printColorMaze();
+////
+//        twelveMaze.printColorMaze();
+//        new SimpleSolver(twelveMaze);
+//        System.out.println("Final 12x12 Maze");
 //        twelveMaze.printColorMaze();
 //
 //        fourteenMaze.printColorBaseNodes();

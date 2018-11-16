@@ -5,6 +5,8 @@ import java.lang.Math;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import javax.annotation.processing.SupportedSourceVersion;
+
 public class SimpleSolver {
     private final Maze initialMaze;
     private Node[][] nodes;
@@ -17,33 +19,36 @@ public class SimpleSolver {
         nodes = inMaze.getNodeMaze();
 
 //        newDFS(inMaze.getNodeMaze(), inMaze);
-//        mazeDFS(nodes, inMaze);
-        logicUpdate(inMaze.getNodeMaze(),inMaze.getBaseNodes());
-        pathDFS(inMaze.getNodeMaze(), inMaze.getBaseNodes()[0], inMaze.getBaseNodes()[0]);
-        inMaze.printColorMaze();
-
-//        Node[][] in = inMaze.getNodeMaze();
-//        Node[] Base = inMaze.getBaseNodes();
+        mazeDFS(nodes, inMaze);
+//
+        Node[][] in = inMaze.getNodeMaze();
+        Node[] Base = inMaze.getBaseNodes();
 //
 //        printBase(Base);
 //        printMaze(in);
 //
 //        in = logicUpdate(in,Base);
-//        initialMaze.printColorMaze();
+//        System.out.println("Logic Maze");
+//        inMaze.printColorMaze();
+//
+//        System.out.println("Reset Maze");
+//        inMaze.reset();
+//        inMaze.printColorMaze();
 
         //printMaze(in);
 
     }
 
     private Node[][] newDFS(Node[][] nodeMaze, Maze inMaze) {
-        Node[] baseNodes = inMaze.getBaseNodes();
+        Node[] baseNodes = inMaze.getFirstBaseNodes();
 
         for (Node base : baseNodes) {
-
-            if(findEnd(base,base,nodeMaze) != blank) { // if it isn't connected already
-                recursiveSearch(nodeMaze,base);
-
-            }
+            System.out.println("Base Node " + base.getValue() + " at X:" + base.getX() + " Y:" + base.getY());
+//
+//            if(findEnd(base,base,nodeMaze) != blank) { // if it isn't connected already
+//                recursiveSearch(nodeMaze,base);
+//
+//            }
 
         }
 
@@ -70,7 +75,7 @@ public class SimpleSolver {
             if (neighbor != null) {
 
                 // if the neighbor is the same color and connected to the other base
-                if (neighbor.getValue() == base.getValue() && connectedBase(nodeMaze,neighbor) != base) {
+                if (neighbor.getValue() == base.getValue() && connectedBase(nodeMaze, currentNode, neighbor) != base) {
                     currentNode.setValue(base.getValue());
                     hasFoundOtherBase = true;
                 }
@@ -88,33 +93,55 @@ public class SimpleSolver {
         nodeMaze = logicUpdate(nodeMaze, inMaze.getBaseNodes());
 //        inMaze.printColorMaze();
 
-        HashMap<Character, Integer> baseNodeMap = new HashMap<>();
+        boolean foundPath = false;
+        // for each base node
+        while (!foundPath) {
+            Node [] firstBaseNodes = inMaze.getFirstBaseNodes();
+            for (Node currentNode : firstBaseNodes) {
 
-        // for each base node, add it to a hash map to see if it has been reached twice
-        for (Node currentNode : inMaze.getBaseNodes()) {
-            if ( currentNode == null ) {
-                break; }
-            if (!baseNodeMap.containsKey(currentNode.getValue())) {
-                baseNodeMap.put(currentNode.getValue(), 1);
-            }
-            else if (baseNodeMap.get(currentNode.getValue()) == 1) { // when we have found the 2nd instance of a color's base
                 Node baseNode = currentNode;
                 currentNode = findEnd(currentNode, currentNode, nodeMaze); // find the end of the path from the base
+
                 if (currentNode != blank) {
-                    pathDFS(nodeMaze, currentNode, baseNode);
-//                    printMaze(nodeMaze);
+                    foundPath = pathDFS(nodeMaze, currentNode, baseNode);
+//                    System.out.println("found path if true :"+foundPath);
+//                    inMaze.printColorMaze();
+                    if (foundPath == false) {
+//                        inMaze.printColorMaze();
+//                        inMaze.reset();
+                    }
+                    else {
+                        System.out.println("Found Path from node X:" + currentNode.getX() + " Y:" + currentNode.getY());
+                        inMaze.printColorMaze();
+                    }
+
+//                    inMaze.printColorMaze();
+//                    System.out.println("logic update:");
+                    logicUpdate(nodeMaze, inMaze.getBaseNodes());
+//                    inMaze.printColorMaze();
+
+
                 }
-                baseNodeMap.replace(baseNode.getValue(), 2);
+                else {
+                    foundPath = true; // if the current node is connected to the other base
+                    System.out.printf("Node is connected from X:%d, Y:%d\n", baseNode.getX(), baseNode.getY());
+                    inMaze.printColorMaze();
+                }
+
             }
-            else System.out.println("A base node exists 3 or more times, fault.");
+            if (!foundPath) {
+                System.out.println("Cant find path on Maze");
+                inMaze.printColorMaze();
+                inMaze.reset();
+            }
         }
 
         //System.out.println("I think this means its working");
         return nodeMaze;
     }
 
-    private int pathDFS(Node[][] nodeMaze, Node currentNode, Node baseNode) {
-        printMaze(nodeMaze);
+    private boolean pathDFS(Node[][] nodeMaze, Node currentNode, Node baseNode) {
+//        printMaze(nodeMaze);
         ArrayList<Node> pathNodes = new ArrayList<>();
         Node[] neighbors = checkNeighborsFor(currentNode, nodeMaze);
 
@@ -126,9 +153,9 @@ public class SimpleSolver {
             if (neighbor != null) { // if the neighbor isn't null
 
                 // if the neighbor is the same color as the base and not connected to the base
-                if (neighbor.getValue() == baseNode.getValue() && connectedBase(nodeMaze,neighbor) != baseNode) {
+                if (neighbor.getValue() == baseNode.getValue() && connectedBase(nodeMaze,currentNode, neighbor) != baseNode) {
                     pathNodes.add(currentNode);
-                    return 0;
+                    return true;
                 }
 
             }
@@ -137,18 +164,35 @@ public class SimpleSolver {
 
         for (Node neighbor : neighbors) { // for each node around current
             if (neighbor != null) { // if the neighbor isn't null
-                if (neighbor.getValue() == '_') { // and is blank
-                    int returnMe = pathDFS(nodeMaze, neighbor, baseNode);
-                    if (returnMe == 0) return returnMe;
+                if (neighbor.getValue() == '_' && doesntZigzag(nodeMaze, neighbor, baseNode)) { // and is blank
+                    currentNode.setValue(baseNode.getValue());
+
+                    boolean returnMe = pathDFS(nodeMaze, neighbor, baseNode);
+                    if (returnMe == true) return returnMe;
+                    else currentNode.setValue('_');
                 }
             }
         }
 
         currentNode.setValue('_');
-        System.out.println("Bad News Bears");
-        return 1;
+//        System.out.println("Bad News Bears in SimpleSolver pathDFS");
+        return false;
     }
 
+    // makes makes sure that adding a node wont create a zigzag or loop
+    private boolean doesntZigzag(Node[][] nodeMaze, Node currentNode, Node baseNode) {
+        Node[] neighbors = checkNeighborsFor(currentNode, nodeMaze);
+        int count = 0;
+        for (Node node : neighbors) {
+
+            // if the neighbor isnt null, has the same color as the current node, and is a base node that isnt connected
+            if (node != null && node.getValue() == baseNode.getValue() && (!node.getBase() || node == baseNode)) count++;
+            if (count >= 2) return false;
+        }
+        return true;
+    }
+
+    // shuffles order of neighbor nodes
     private Node[] shuffle(Node[] neighbors) {
         ArrayList<Node> oldNeighbors = new ArrayList<>();
 
@@ -195,24 +239,25 @@ public class SimpleSolver {
     }
 
     // method to return the base node connected to a non base node
-    private Node connectedBase(Node[][] nodeMaze, Node startNode) {
-        Node currentNode = startNode;
-        Node lastNode = currentNode;
+    private Node connectedBase(Node[][] nodeMaze, Node currentNode, Node neighborNode) {
 
-        // while the current node isn't a base node
-        while (!currentNode.getBase()) {
-            Node[] neighbors = checkNeighborsFor(currentNode,nodeMaze); // find neighbors
+        if (currentNode.getBase()) return currentNode;
+        if (neighborNode.getBase()) return neighborNode;
+        // while the neighbor node isn't a base node
+        while (!neighborNode.getBase()) {
+            Node[] neighbors = checkNeighborsFor(neighborNode,nodeMaze); // find neighbors
             for (Node node : neighbors) { // for each neighbor
                 if (node != null) {
-                    if (node.getValue() == currentNode.getValue() && node != lastNode) { // if the neighbor is the same color and not the last node
-                        lastNode = currentNode;
-                        currentNode = node; // make that the current node
+                    if (node.getValue() == currentNode.getValue() && node != currentNode) { // if the neighbor is the same color and not the last node
+                        currentNode = neighborNode;
+                        neighborNode = node;
+                        break;
                     }
                 }
             }
         }
 
-        return currentNode;
+        return neighborNode;
     }
 
 
@@ -297,7 +342,7 @@ public class SimpleSolver {
             temp = findEnd(option,temp,in);
         }
         else{
-            System.out.println(" something wrong in findEnd");
+//            System.out.println(" something wrong in findEnd");
         }
 
         return temp;
