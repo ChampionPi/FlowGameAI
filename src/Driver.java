@@ -7,20 +7,27 @@ public class Driver {
     public static void main(String[] args) throws IOException {
         Maze fiveMaze     = readMazeIn("5x5maze.txt");
         Maze sevenMaze    = readMazeIn("7x7maze.txt");
-        Maze eightMaze    = readMazeIn("8x8maze.txt");
-        Maze nineMaze     = readMazeIn("9x9maze.txt");
-        Maze tenMaze      = readMazeIn("10x10maze.txt");
-        Maze twelveMaze   = readMazeIn("12x12maze.txt");
-        Maze fourteenMaze = readMazeIn("14x14maze.txt");
+//        Maze eightMaze    = readMazeIn("8x8maze.txt");
+//        Maze nineMaze     = readMazeIn("9x9maze.txt");
+//        Maze tenMaze      = readMazeIn("10x10maze.txt");
+//        Maze twelveMaze   = readMazeIn("12x12maze.txt");
+//        Maze fourteenMaze = readMazeIn("14x14maze.txt");
 
-        fiveMaze.printColorBaseNodes();
+//        fiveMaze.printColorBaseNodes();
         System.out.println();
-        fiveMaze.dumbSolve();
-        fiveMaze.solveMaze();
+        //fiveMaze.dumbSolve();
+
+//        fiveMaze.solveMaze();
+        fiveMaze.printColorMaze();
+        new SimpleSolver(fiveMaze);
+        System.out.println("Final 5x5 Maze");
         fiveMaze.printColorMaze();
 
-//        sevenMaze.printColorBaseNodes();
-//        sevenMaze.printColorMaze();
+        //sevenMaze.printColorBaseNodes();
+        sevenMaze.printColorMaze();
+        new SimpleSolver((sevenMaze));
+        System.out.println("Final 7x7 Maze");
+        sevenMaze.printColorMaze();
 //
 //        eightMaze.printColorBaseNodes();
 //        eightMaze.printColorMaze();

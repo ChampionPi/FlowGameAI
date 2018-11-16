@@ -1,8 +1,8 @@
 public class Maze {
 
     private Node[][] nodeMaze;          //holds the maze with each node containing all relevant information for that spot
-    private Node[] baseNodes;           //holds all nodes that had values when the maze was imported
-    private Node[] emptyNodes;          //holds all nodes that are empty when the maze in imported
+    private final Node[] baseNodes;     //holds all nodes that had values when the maze was imported
+    private final Node[] emptyNodes;    //holds all nodes that are empty when the maze in imported
     private Node temp;                  //general temp node to pass info around
     private int mazeDim;                //for 5x5 maze holds the number 5
     private int baseNodesSize = 0;      //numbers of basenodes, naturally counted starting at 1
@@ -39,16 +39,27 @@ public class Maze {
                 }
             }
         }
+        // add flow direction
+//        char[] tempBase = new char[baseNodesSize];
+//        System.out.print(baseNodesSize);
+//        for(int i=0;i<baseNodesSize;i++){
+//            Node inTemp = baseNodes[i];
+//
+//            for(int k=i;k>=0;k--){
+//                //System.out.println(k);
+//                if(inTemp.getValue()==tempBase[k]){
+//                    inTemp.setFlow(2);
+//                    break;
+//                }
+//
+//                inTemp.setFlow(1);
+//            }
+//            tempBase[i] =inTemp.getValue();
+//            System.out.println(inTemp.getValue()+" flows "+inTemp.getFlow());
+//        }
     }
-    //solves the maze, mostly just calls the other functions
-    public void solveMaze(){                                                                                            //will solve our maze
-        for(int x = 0; x < (baseNodesSize/2)-1; x++){
-            int secondNodeIndex = x + 1;
-
-        }
 
         //TODO Solve the maze
-    }
     //theoretically you give it two nodes and it travels from one to other
     private void travelFromTo(Node inFirstNode, Node inSecondNode){
         int travelX = inFirstNode.getX() - inSecondNode.getX();
@@ -99,19 +110,34 @@ public class Maze {
             }
         }
     }
-    //takes in put node and checks all 4 nodes if those nodes values ==
-    private Node checkNeighborsFor(Node inNode, char inSearchFor){                                                      //can be used to find empty spaces or partner
-        if( 0 <= inNode.getX() + 1 && inNode.getX() + 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX() + 1][inNode.getY()].getValue()){
-            return nodeMaze[inNode.getX()+1][inNode.getY()];
-        }else if( 0 <= inNode.getX() - 1 && inNode.getX() - 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX() - 1][inNode.getY()].getValue()){
-            return nodeMaze[inNode.getX()-1][inNode.getY()];
-        }else if( 0 <= inNode.getY() + 1 && inNode.getY() + 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX()][inNode.getY() + 1].getValue()){
-            return nodeMaze[inNode.getX()][inNode.getY()+1];
-        }else if( 0 <= inNode.getY() - 1 && inNode.getY() - 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX()][inNode.getY() - 1].getValue()){
-            return nodeMaze[inNode.getX()][inNode.getY()-1];
-        }else{
-            return null;
+
+    public Node [] checkNeighborsFor(Node inNode){                                               //can be used to find empty spaces or partner
+
+        Node temp [] = new Node [3];
+
+        if( 0 <= inNode.getX() + 1 && inNode.getX() + 1 < mazeDim){ // add right node to array
+            temp[1]= nodeMaze[inNode.getX()+1][inNode.getY()];
+        }else if( 0 <= inNode.getX() - 1 && inNode.getX() - 1 < mazeDim ){ // add left node
+            temp[3]= nodeMaze[inNode.getX()-1][inNode.getY()];
+        }else if( 0 <= inNode.getY() + 1 && inNode.getY() + 1 < mazeDim ){ // down
+            temp[2]= nodeMaze[inNode.getX()][inNode.getY()+1];
+        }else if( 0 <= inNode.getY() - 1 && inNode.getY() - 1 < mazeDim ){ // up
+            temp[0]= nodeMaze[inNode.getX()][inNode.getY()-1];
         }
+        return temp;
+
+    }
+
+    private Node isNeighbor(char C, Node temp) {// ? method that looks for specific char in checkNeighborFor
+        Node tarray[];
+        tarray = checkNeighborsFor(temp);
+
+        for(int i=0;i< tarray.length;i++){
+            if(tarray[i].getValue()== C){
+                return tarray[i];
+            }
+        }
+        return null;
     }
     //just checks the node above the current node for the char value passed in
     private Node checkUpNeighborFor(Node inNode, char inSearchFor){                                                      //can be used to find empty spaces or partner
@@ -146,17 +172,20 @@ public class Maze {
         }
     }
     //totally honest not sure how this was supposed to work or whit it does
-    private Node undo(Node inNode){
+
+
+    /*private Node undo(Node inNode){
         Node temp = inNode;
         if(!inNode.getBase()) {
             inNode.setValue('_');
         } else {
             return null;
         }
-        temp = checkNeighborsFor(temp, temp.getValue());
+        temp = isNeighbor(temp, temp.getValue());
         return temp;
-    }
-    //prints the node maze w/ out color... what a bore
+    }*/
+
+
     public void printMaze() {                       //will print out the maze, printing each nodes value which is a char
         for (int x = 0; x < mazeDim; x++) {
             for (int y = 0; y < mazeDim; y++) {
@@ -236,4 +265,14 @@ public class Maze {
         }
         System.out.println();
     }
+
+    public Node[] getBaseNodes(){
+        return baseNodes;
+
+    }
+
+    public Node[][] getNodeMaze(){
+        return nodeMaze;
+    }
+
 }
