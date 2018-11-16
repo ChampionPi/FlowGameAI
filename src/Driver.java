@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 public class Driver {
     public static void main(String[] args) throws IOException {
+        double start, end;
+
         Maze fiveMaze     = readMazeIn("5x5maze.txt");                                                        //Load Mazes
         Maze sevenMaze    = readMazeIn("7x7maze.txt");
         Maze eightMaze    = readMazeIn("8x8maze.txt");
@@ -20,21 +22,34 @@ public class Driver {
 //        fiveMaze.solveMaze();
         System.out.println("Initial Maze");
         fiveMaze.printColorMaze();
+        start = System.currentTimeMillis();
         new SimpleSolver(fiveMaze);
+        end = System.currentTimeMillis();
         System.out.println("Final 5x5 Maze");
         fiveMaze.printColorMaze();
 
+        System.out.println("Time to solve is " + (end - start) + "ms.");
+
         //sevenMaze.printColorBaseNodes();
         sevenMaze.printColorMaze();
+        start = System.currentTimeMillis();
         new SimpleSolver((sevenMaze));
+        end = System.currentTimeMillis();
         System.out.println("Final 7x7 Maze");
         sevenMaze.printColorMaze();
+
+        System.out.println("Time to solve is " + (end - start) + "ms.");
+
 //
-//        eightMaze.printColorMaze();
-//        new SimpleSolver(eightMaze);
-//        System.out.println("Final 8x8 Maze");
-//        eightMaze.printColorMaze();
-//
+        eightMaze.printColorMaze();
+        start = System.currentTimeMillis();
+        new SimpleSolver(eightMaze);
+        end = System.currentTimeMillis();
+        System.out.println("Final 8x8 Maze");
+        eightMaze.printColorMaze();
+
+        System.out.println("Time to solve is " + (end - start) + "ms.");
+
 //        nineMaze.printColorMaze();
 //        new SimpleSolver(nineMaze);
 //        System.out.println("Final 9x9 Maze");

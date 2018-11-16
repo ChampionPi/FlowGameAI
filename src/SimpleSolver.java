@@ -24,6 +24,7 @@ public class SimpleSolver {
         printBase(Base);
         printMaze(in);
 //
+//        mazeDFS(nodes, inMaze);
 //        in = logicUpdate(in,Base);
 //        System.out.println("Logic Maze");
 //        inMaze.printColorMaze();
@@ -39,6 +40,8 @@ public class SimpleSolver {
         }
 
         //in = logicUpdate(in,Base);
+
+        mazeDFS(nodes, inMaze);
 
         printMaze(in);
 
@@ -176,56 +179,6 @@ public class SimpleSolver {
             }
         }
         return sBase;
-    }
-
-    private Node[][] newDFS(Node[][] nodeMaze, Maze inMaze) {
-        Node[] baseNodes = inMaze.getFirstBaseNodes();
-
-        for (Node base : baseNodes) {
-            System.out.println("Base Node " + base.getValue() + " at X:" + base.getX() + " Y:" + base.getY());
-//
-//            if(findEnd(base,base,nodeMaze) != blank) { // if it isn't connected already
-//                recursiveSearch(nodeMaze,base);
-//
-//            }
-
-        }
-
-        return null;
-    }
-
-    private void recursiveSearch(Node[][] nodeMaze, Node base) {
-        Node currentNode = findEnd(base,base,nodeMaze); // find the node at the end of it's path
-
-        HashMap<Node, Integer> directionMap = new HashMap<>(); // create a hash map for directions from each node
-        ArrayList<Node> nodeList = new ArrayList<>(); // arraylist to keep track of order of mappings
-
-        directionMap.put(currentNode, 0); // add current node with a direction of 0 (up)
-        nodeList.add(currentNode);
-
-        directionArray.add(directionMap); // add the hash map to the direction array to store across method calls
-        nodeArrayList.add(nodeList);
-
-
-        boolean hasFoundOtherBase = false;
-        while (!hasFoundOtherBase) {
-            currentNode = nodeList.get(directionMap.size());
-            Node neighbor = neighborInDirection(nodeMaze, currentNode, directionMap.get(currentNode));
-            if (neighbor != null) {
-
-                // if the neighbor is the same color and connected to the other base
-                if (neighbor.getValue() == base.getValue() && connectedBase(nodeMaze, currentNode, neighbor) != base) {
-                    currentNode.setValue(base.getValue());
-                    hasFoundOtherBase = true;
-                }
-
-                // else if the neighbor is blank
-                else if (neighbor.getValue() == '_') {
-                    currentNode.setValue(base.getValue());
-
-                }
-            }
-        }
     }
 
     private Node[][] mazeDFS(Node[][] nodeMaze, Maze inMaze) {
