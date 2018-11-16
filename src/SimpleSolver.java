@@ -1,11 +1,7 @@
-import java.awt.image.AreaAveragingScaleFilter;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.lang.Math;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
-import javax.annotation.processing.SupportedSourceVersion;
 
 public class SimpleSolver {
     private final Maze initialMaze;
@@ -133,6 +129,9 @@ public class SimpleSolver {
                 System.out.println("Cant find path on Maze");
                 inMaze.printColorMaze();
                 inMaze.reset();
+                nodeMaze = inMaze.getNodeMaze();
+                System.out.println("Reverted Maze");
+                inMaze.printColorMaze();
             }
         }
 
