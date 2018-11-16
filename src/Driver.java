@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Driver {
     public static void main(String[] args) throws IOException {
-        Maze fiveMaze     = readMazeIn("5x5maze.txt");
+        Maze fiveMaze     = readMazeIn("5x5maze.txt");                                                        //Load Mazes
         Maze sevenMaze    = readMazeIn("7x7maze.txt");
 //        Maze eightMaze    = readMazeIn("8x8maze.txt");
 //        Maze nineMaze     = readMazeIn("9x9maze.txt");
@@ -13,7 +13,7 @@ public class Driver {
 //        Maze twelveMaze   = readMazeIn("12x12maze.txt");
 //        Maze fourteenMaze = readMazeIn("14x14maze.txt");
 
-//        fiveMaze.printColorBaseNodes();
+//        fiveMaze.printColorBaseNodes();                                                                               //Prints to the console with color
         System.out.println();
         //fiveMaze.dumbSolve();
 
@@ -47,8 +47,8 @@ public class Driver {
         System.out.println("Program Done");
     }
 
-    private static Maze readMazeIn(String mazeName) throws IOException {
-        ArrayList<String> maze = new ArrayList<>();
+    private static Maze readMazeIn(String mazeName) throws IOException {                                                //creates a 2 dimensional character array
+        ArrayList<String> maze = new ArrayList<>();                                                                     // that holds the maze
         try (BufferedReader br = new BufferedReader(new FileReader(mazeName))) {
             String line = br.readLine();
             while (line != null) {
