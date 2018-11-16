@@ -21,8 +21,8 @@ public class SimpleSolver {
         Node[] Base = inMaze.getBaseNodes();
         Node [] sBase=singleBase(Base);     // key for forward checking 3d array color spot
 
-        printBase(Base);
-        printMaze(in);
+        //printBase(Base);
+        //printMaze(in);
 //
 //        mazeDFS(nodes, inMaze);
 //        in = logicUpdate(in,Base);
@@ -47,6 +47,9 @@ public class SimpleSolver {
 
     }
 
+    // creates 3d boolean that represents the ability of half the base nodes (one of each color)
+    // to reach the other base node (of that same color). if all base nodes are able to reach
+    // their corresponding base node then return true, if one flow cannot be completed, return false.
     public boolean forwardCheck(Node [][]in , Node[] Base){
         Node [] sBase=singleBase(Base);
         printBase(sBase);
@@ -84,6 +87,8 @@ public class SimpleSolver {
 
     }
 
+    // given char and the base array, finds the int that represents the index
+    // for the 3rd dimension of the 3d boolean. used in checkoption
     private int Index(char c, Node []sBase){
 
         for(int i=0;i<sBase.length;i++){
@@ -94,8 +99,9 @@ public class SimpleSolver {
         return -1;
     }
 
+    //used by forward checking, this method fills out the 3d forward checking
     private boolean[][][] checkoption(boolean[][][] option, Node [][] in, Node [] sBase){
-        for(int i=0;i<in[1].length;i++){  // sets alredy given values
+        for(int i=0;i<in[1].length;i++){  // sets already given values
             for( int j=0; j<in[1].length;j++){
                 if(in[i][j].getValue() != '_'){
                     option[i][j][0] = true;
@@ -125,6 +131,8 @@ public class SimpleSolver {
         return option;
     }
 
+    // used by check option, recursively solves for all the spots that start Node color can be
+    // then outputs a 2d boolean that we stick into our 3d boolean in check option
     private boolean[][] searchRecur(Node [][] in, Node start, boolean[][] bo){  // send in end node
         Node neighbors[] = checkNeighborsFor(start,in);
 
@@ -151,6 +159,7 @@ public class SimpleSolver {
         return bo;
     }
 
+    // loops through the base nodes and returns array of one of each color base node
     private Node[] singleBase(Node[] Base){
         int count =0;
         for(int i=0;i<Base.length;i++){
@@ -397,6 +406,7 @@ public class SimpleSolver {
         return in;
     }
 
+    // Recursively find the end of current flow. Takes in start node ( same node 2x) and 2d maze array
     public Node findEnd(Node temp, Node last, Node [][] in){
 
         Node [] arr = checkNeighborsFor(temp,in);
@@ -444,6 +454,8 @@ public class SimpleSolver {
         return temp;
     }
 
+    // Checks a node for the 4 nodes around it. Takes in start node and 2d maze array
+    // outputs an array of nodes that surround inNode
     public Node [] checkNeighborsFor(Node inNode, Node [][] maze){  //can be used to find empty spaces or partner
 
         Node temp [] = new Node [4];
@@ -465,6 +477,8 @@ public class SimpleSolver {
 
     }
 
+    // Checks to see if there is only one spot for the flow to go. Intakes
+    // spot
     public int ifOnly(Node temp, Node [][] maze){ // checks if there is only one spot to go
         Node [] neighbors = checkNeighborsFor(temp, maze);
         //System.out.println("ifOnly neighbors of "+temp.getX()+", "+ temp.getY());
