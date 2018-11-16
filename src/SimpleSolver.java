@@ -15,13 +15,14 @@ public class SimpleSolver {
         nodes = inMaze.getNodeMaze();
 
 //        newDFS(inMaze.getNodeMaze(), inMaze);
-        mazeDFS(nodes, inMaze);
+//        mazeDFS(nodes, inMaze);
 //
         Node[][] in = inMaze.getNodeMaze();
         Node[] Base = inMaze.getBaseNodes();
-//
-//        printBase(Base);
-//        printMaze(in);
+        Node [] sBase=singleBase(Base);     // key for forward checking 3d array color spot
+
+        printBase(Base);
+        printMaze(in);
 //
 //        in = logicUpdate(in,Base);
 //        System.out.println("Logic Maze");
@@ -31,8 +32,150 @@ public class SimpleSolver {
 //        inMaze.reset();
 //        inMaze.printColorMaze();
 
-        //printMaze(in);
 
+
+        if(forwardCheck(in,Base)){
+            System.out.println("did not die");
+        }
+
+        //in = logicUpdate(in,Base);
+
+        printMaze(in);
+
+    }
+
+    public boolean forwardCheck(Node [][]in , Node[] Base){
+        Node [] sBase=singleBase(Base);
+        printBase(sBase);
+
+        boolean[][][] option = new boolean[in[1].length][in[1].length][sBase.length+1];
+        // option is possibilities for each node, first spot indicates if given color
+
+        option = checkoption(option,in, sBase);
+
+
+
+        // check each end/ base node that's not null to see if it can be reached from other end/ base node
+        boolean possible = false;
+        for(int i=0; i< Base.length;i++){
+            if(Base[i]!=null){
+                Node temp = findEnd(Base[i],Base[i],in);
+                Node []neighbors = checkNeighborsFor(temp,in);
+                int index = Index(Base[i].getValue(),sBase);
+
+                if(neighbors[0]!=null && option[neighbors[0].getX()][neighbors[0].getY()][index]){
+                    possible = true;
+                }
+                if(neighbors[1]!=null && option[neighbors[1].getX()][neighbors[1].getY()][index]){
+                    possible = true;
+                }
+                if(neighbors[2]!=null && option[neighbors[2].getX()][neighbors[2].getY()][index]){
+                    possible = true;
+                }
+                if(neighbors[3]!=null && option[neighbors[3].getX()][neighbors[3].getY()][index]){
+                    possible = true;
+                }
+            }
+        }
+        return possible;
+
+    }
+
+    private int Index(char c, Node []sBase){
+
+        for(int i=0;i<sBase.length;i++){
+            if(sBase[i].getValue()==c){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private boolean[][][] checkoption(boolean[][][] option, Node [][] in, Node [] sBase){
+        for(int i=0;i<in[1].length;i++){  // sets alredy given values
+            for( int j=0; j<in[1].length;j++){
+                if(in[i][j].getValue() != '_'){
+                    option[i][j][0] = true;
+                    option[i][j][Index(in[i][j].getValue(),sBase)]= true;
+                }
+            }
+        }
+
+        // look at sBase, on of each particular base node, add all option tracks from that node,
+        // back in forward check see if any surrounding node for other base/ end nodes can be that color
+
+        for(int j=0; j<sBase.length;j++){ // j is index for sBase
+            Node end = findEnd(sBase[j],sBase[j],in);
+            boolean [][] bo = new boolean [in[1].length][in[1].length];
+            boolean [][] temp = searchRecur(in, end,bo);
+            System.out.println("option at "+j);
+            printBo(temp);
+            for(int k =0; k<option.length;k++){
+                for(int l=0; l<option.length;l++){
+                    option[k][l][j] = temp[k][l];
+
+                }
+            }
+
+
+        }
+        return option;
+    }
+
+    private boolean[][] searchRecur(Node [][] in, Node start, boolean[][] bo){  // send in end node
+        Node neighbors[] = checkNeighborsFor(start,in);
+
+        if(neighbors[0]!= null && neighbors[0].getValue()=='_' && !bo[neighbors[0].getX()][neighbors[0].getY()]){
+            Node temp = neighbors[0];
+            bo[temp.getX()][temp.getY()]= true;
+            searchRecur(in,temp,bo);
+        }
+        if(neighbors[1]!= null && neighbors[1].getValue()=='_'&& !bo[neighbors[1].getX()][neighbors[1].getY()]){
+            Node temp = neighbors[1];
+            bo[temp.getX()][temp.getY()]= true;
+            searchRecur(in,temp,bo);
+        }
+        if(neighbors[2]!= null && neighbors[2].getValue()=='_'&& !bo[neighbors[2].getX()][neighbors[2].getY()]){
+            Node temp = neighbors[2];
+            bo[temp.getX()][temp.getY()]= true;
+            searchRecur(in,temp,bo);
+        }
+        if(neighbors[3]!= null && neighbors[3].getValue()=='_'&& !bo[neighbors[3].getX()][neighbors[3].getY()]){
+            Node temp = neighbors[3];
+            bo[temp.getX()][temp.getY()]= true;
+            searchRecur(in,temp,bo);
+        }
+        return bo;
+    }
+
+    private Node[] singleBase(Node[] Base){
+        int count =0;
+        for(int i=0;i<Base.length;i++){
+            if(Base[i] != null){
+                count++;
+            }
+        }
+
+        Node [] sBase = new Node[count/2];
+        count = 0;
+
+        for(int j=0; j<Base.length;j++){
+            if(Base[j]!= null){
+                boolean add = true;
+                for(int k=0;k<sBase.length;k++){
+                    if(Base[j] != null & sBase[k]!= null) {
+                        if( Base[j].getValue()==sBase[k].getValue()) {
+                            add = false;
+                        }
+                    }
+                }
+                if(add){
+                    sBase[count] =Base[j];
+                    count++;
+                }
+            }
+        }
+        return sBase;
     }
 
     private Node[][] newDFS(Node[][] nodeMaze, Maze inMaze) {
@@ -419,6 +562,22 @@ public class SimpleSolver {
             else {
                 //System.out.print(base[i].getValue() + ", ");
             }
+        }
+        System.out.println();
+    }
+
+    public void printBo(boolean[][] bo){
+        System.out.println();
+        for(int i=0; i<bo[1].length;i++){
+            for(int j=0;j<bo[1].length;j++){
+                if(bo[i][j]){
+                    System.out.print(" 1");
+                }
+                else{
+                    System.out.print(" 0");
+                }
+            }
+            System.out.println();
         }
         System.out.println();
     }

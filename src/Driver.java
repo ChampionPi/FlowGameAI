@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class Driver {
     public static void main(String[] args) throws IOException {
-        Maze fiveMaze     = readMazeIn("5x5maze.txt");                                                        //Load Mazes
-        Maze sevenMaze    = readMazeIn("7x7maze.txt");
-        Maze eightMaze    = readMazeIn("8x8maze.txt");
-        Maze nineMaze     = readMazeIn("9x9maze.txt");
-        Maze tenMaze      = readMazeIn("10x10maze.txt");
-        Maze twelveMaze   = readMazeIn("12x12maze.txt");
-//        Maze fourteenMaze = readMazeIn("14x14maze.txt");
+        Maze fiveMaze     = readMazeIn("5x5maze.txt");
+//        Maze sevenMaze    = readMazeIn("7x7maze.txt");
+//        Maze eightMaze    = readMazeIn("8x8maze.txt");
+//        Maze nineMaze     = readMazeIn("9x9maze.txt");
+//        Maze tenMaze      = readMazeIn("10x10maze.txt");
+//        Maze twelveMaze   = readMazeIn("12x12maze.txt");
+//        Maze fourteenMaze = readMazeIn("14x14maze.txt"); // no longer need to do
 
 //        fiveMaze.printColorBaseNodes();                                                                               //Prints to the console with color
         System.out.println();
@@ -23,6 +23,11 @@ public class Driver {
         new SimpleSolver(fiveMaze);
         System.out.println("Final 5x5 Maze");
         fiveMaze.printColorMaze();
+//
+//        sevenMaze.printColorBaseNodes();
+//        sevenMaze.printColorMaze();
+//        new SimpleSolver(sevenMaze);
+
 
         //sevenMaze.printColorBaseNodes();
 //        sevenMaze.printColorMaze();
@@ -30,11 +35,13 @@ public class Driver {
 //        System.out.println("Final 7x7 Maze");
 //        sevenMaze.printColorMaze();
 //
-        eightMaze.printColorMaze();
-        new SimpleSolver(eightMaze);
-        System.out.println("Final 8x8 Maze");
-        eightMaze.printColorMaze();
+//        eightMaze.printColorMaze();
+//        new SimpleSolver(eightMaze);
+//        System.out.println("Final 8x8 Maze");
+//        eightMaze.printColorMaze();
+//        new SimpleSolver(eightMaze);
 //
+//        nineMaze.printColorBaseNodes();
 //        nineMaze.printColorMaze();
 //        new SimpleSolver(nineMaze);
 //        System.out.println("Final 9x9 Maze");

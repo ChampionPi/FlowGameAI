@@ -134,17 +134,17 @@ public class Maze {
 
     }
 
-    private Node isNeighbor(char C, Node temp) {// ? method that looks for specific char in checkNeighborFor
-        Node tarray[];
-        tarray = checkNeighborsFor(temp);
-
-        for(int i=0;i< tarray.length;i++){
-            if(tarray[i].getValue()== C){
-                return tarray[i];
-            }
-        }
-        return null;
-    }
+//    private Node isNeighbor(char C, Node temp) {// ? method that looks for specific char in checkNeighborFor
+//        Node tarray[];
+//        tarray = checkNeighborsFor(temp);
+//
+//        for(int i=0;i< tarray.length;i++){
+//            if(tarray[i].getValue()== C){
+//                return tarray[i];
+//            }
+//        }
+//        return null;
+//    }
     //just checks the node above the current node for the char value passed in
     private Node checkUpNeighborFor(Node inNode, char inSearchFor){                                                      //can be used to find empty spaces or partner
         if( 0 <= inNode.getY() - 1 && inNode.getY() - 1 < mazeDim && inSearchFor == nodeMaze[inNode.getX()][inNode.getY() - 1].getValue()){
