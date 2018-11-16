@@ -11,8 +11,14 @@ public class SimpleSolver {
     private final Node blank = new Node(-1,-1,'#');
     private ArrayList<HashMap<Node, Integer>> directionArray = new ArrayList<>();
     private ArrayList<ArrayList<Node>> nodeArrayList = new ArrayList<>();
+    private double finishTime;      //used to track timing
+    private double startTime;
+
+    //startTime = System.currentTimeMillis();
+    //finishTime = System.currentTimeMillis();
 
     public SimpleSolver(Maze inMaze){
+        startTime = System.currentTimeMillis();
         initialMaze = inMaze;
         nodes = inMaze.getNodeMaze();
 
@@ -20,6 +26,8 @@ public class SimpleSolver {
 //        mazeDFS(nodes, inMaze);
         logicUpdate(inMaze.getNodeMaze(),inMaze.getBaseNodes());
         pathDFS(inMaze.getNodeMaze(), inMaze.getBaseNodes()[0], inMaze.getBaseNodes()[0]);
+        finishTime = System.currentTimeMillis();
+        System.out.println("The time in milliseconds to solve the maze is " + (finishTime - startTime));
         inMaze.printColorMaze();
 
 //        Node[][] in = inMaze.getNodeMaze();
