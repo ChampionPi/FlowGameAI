@@ -25,15 +25,15 @@ public class Driver {
         fiveMaze.printColorMaze();
 
         //sevenMaze.printColorBaseNodes();
-//        sevenMaze.printColorMaze();
-//        new SimpleSolver((sevenMaze));
-//        System.out.println("Final 7x7 Maze");
-//        sevenMaze.printColorMaze();
+        sevenMaze.printColorMaze();
+        new SimpleSolver((sevenMaze));
+        System.out.println("Final 7x7 Maze");
+        sevenMaze.printColorMaze();
 //
-        eightMaze.printColorMaze();
-        new SimpleSolver(eightMaze);
-        System.out.println("Final 8x8 Maze");
-        eightMaze.printColorMaze();
+//        eightMaze.printColorMaze();
+//        new SimpleSolver(eightMaze);
+//        System.out.println("Final 8x8 Maze");
+//        eightMaze.printColorMaze();
 //
 //        nineMaze.printColorMaze();
 //        new SimpleSolver(nineMaze);

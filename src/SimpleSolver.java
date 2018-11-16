@@ -148,6 +148,7 @@ public class SimpleSolver {
 
         currentNode.setValue(baseNode.getValue());
 
+//        printMaze(nodeMaze);
         for (Node neighbor : neighbors) { // for each node around current
             if (neighbor != null) { // if the neighbor isn't null
 
